@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JavaScript Programming Activities</title>
+  <meta name="description" content="Four interactive JavaScript programming activities: a conversion calculator, an income tax calculator, loop-based math calculators, and a simple payroll calculator.">
+  <meta name="color-scheme" content="light dark">
+  <!-- Relative path so the stylesheet also loads on GitHub Pages -->
+  <link rel="stylesheet" href="css/style.css">
+  <!--
+    Theme bootstrap. This tiny script has to run before the page is painted,
+    otherwise a visitor who picked dark mode would see a white flash first.
+    All the other JavaScript lives in js/script.js.
+  -->
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('jsActivities.theme'); } catch (e) {}
+      var prefersDark = window.matchMedia &&
+                        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = (saved === 'light' || saved === 'dark') ? saved
+                                                          : (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    }());
+  </script>
+</head>
+<body>
+
+  <!-- Hamburger button: visible on small screens only -->
+  <button class="menu-toggle" id="menuToggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation menu">
+    <span class="menu-toggle__bars" aria-hidden="true"></span>
+  </button>
+
+  <!-- Dim layer shown behind the sidebar drawer on mobile -->
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <!-- ===================== FIXED SIDEBAR NAVIGATION ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <span class="sidebar__logo" aria-hidden="true">JS</span>
+      <span class="sidebar__title">Personal Website<br>Project-Devera</span>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Main navigation">
+      <ul>
+        <li><a class="nav-link" href="#home" data-view="home"><span class="nav-link__num" aria-hidden="true">&#9679;</span> Home</a></li>
+        <li><a class="nav-link" href="#assignment-1" data-view="assignment-1"><span class="nav-link__num" aria-hidden="true">1</span> Conversion Calculator</a></li>
+        <li><a class="nav-link" href="#assignment-2" data-view="assignment-2"><span class="nav-link__num" aria-hidden="true">2</span> Income Tax Calculator</a></li>
+        <li><a class="nav-link" href="#assignment-3" data-view="assignment-3"><span class="nav-link__num" aria-hidden="true">3</span> Factorial, Sum &amp; Average</a></li>
+        <li><a class="nav-link" href="#assignment-4" data-view="assignment-4"><span class="nav-link__num" aria-hidden="true">4</span> Simple Payroll</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar__footer">
+      <!-- Light / dark mode switch. The label says what clicking will do. -->
+      <button class="theme-toggle" id="themeToggle" type="button" title="Switch between light and dark mode">
+        <span class="theme-toggle__icon" id="themeIcon" aria-hidden="true">&#9790;</span>
+        <span id="themeLabel">Dark mode</span>
+      </button>
+      <p class="sidebar__credit">HTML &middot; CSS &middot; Vanilla JS</p>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN CONTENT AREA ===================== -->
+  <main class="content" id="content">
+    <div class="container">
+
+      <!-- ---------- HOME ---------- -->
+      <section class="view" id="home" aria-labelledby="home-heading">
+        <header class="page-head">
+          <h1 id="home-heading">Personal Website Project</h1>
+          <p class="lede">
+            Hi I am Kieffer Lance A. Devera, welcome to my JavaScript Programming Activities! This website contains 
+            four programming assignments that demonstrate basic programming concepts through simple and interactive 
+            programs. These include unit conversion, income tax calculation, factorial and natural number calculations 
+            using loops, and a simple payroll system. Explore each assignment using the sidebar menu and try out the 
+            different programs.
+          </p>
+        </header>
+
+        <div class="grid">
+          <a class="card card--link" href="#assignment-1">
+            <span class="card__badge">Assignment 1</span>
+            <h2>Conversion Calculator</h2>
+            <p>Convert between Celsius and Fahrenheit, and between meters and feet.</p>
+            <span class="card__cta">Open activity &rarr;</span>
+          </a>
+
+          <a class="card card--link" href="#assignment-2">
+            <span class="card__badge">Assignment 2</span>
+            <h2>Income Tax Calculator</h2>
+            <p>Compute annual income tax using the Philippine graduated tax brackets.</p>
+            <span class="card__cta">Open activity &rarr;</span>
+          </a>
+
+          <a class="card card--link" href="#assignment-3">
+            <span class="card__badge">Assignment 3</span>
+            <h2>Factorial, Sum &amp; Average</h2>
+            <p>Three calculators demonstrating <code>while</code>, <code>do...while</code>, and <code>for</code> loops.</p>
+            <span class="card__cta">Open activity &rarr;</span>
+          </a>
+
+          <a class="card card--link" href="#assignment-4">
+            <span class="card__badge">Assignment 4</span>
+            <h2>Simple Payroll</h2>
+            <p>Enter an employee&rsquo;s rate and hours worked to generate a gross salary summary.</p>
+            <span class="card__cta">Open activity &rarr;</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ---------- ASSIGNMENT 1: CONVERSION CALCULATOR ---------- -->
+      <section class="view" id="assignment-1" aria-labelledby="a1-heading">
+        <header class="page-head">
+          <span class="eyebrow">Assignment 1</span>
+          <h1 id="a1-heading">Conversion Calculator</h1>
+          <p class="lede">Choose a conversion type, enter a value, then press Convert.</p>
+        </header>
+
+        <div class="card">
+          <div class="field">
+            <label for="conv-type">Conversion type</label>
+            <!-- Options are generated from the CONVERSIONS table in js/script.js -->
+            <select id="conv-type"></select>
+          </div>
+
+          <div class="field">
+            <label for="conv-value">Value to convert</label>
+            <input type="number" id="conv-value" inputmode="decimal" step="any" placeholder="e.g. 25" autocomplete="off">
+            <p class="hint" id="conv-hint"></p>
+          </div>
+
+          <button class="btn" id="conv-btn" type="button">Convert</button>
+
+          <div class="result" id="conv-result" role="status" aria-live="polite" hidden></div>
+        </div>
+      </section>
+
+      <!-- ---------- ASSIGNMENT 2: INCOME TAX CALCULATOR ---------- -->
+      <section class="view" id="assignment-2" aria-labelledby="a2-heading">
+        <header class="page-head">
+          <span class="eyebrow">Assignment 2</span>
+          <h1 id="a2-heading">Income Tax Calculator</h1>
+          <p class="lede">
+            Enter your taxable annual income to compute the income tax due, based on the
+            Philippine graduated tax rates effective January 1, 2023.
+          </p>
+        </header>
+
+        <div class="card">
+          <div class="field">
+            <label for="tax-income">Taxable annual income (PHP)</label>
+            <input type="number" id="tax-income" inputmode="decimal" step="any" min="0" placeholder="e.g. 500000" autocomplete="off">
+            <p class="hint">Income of &#8369;250,000 or less is exempt from income tax.</p>
+          </div>
+
+          <button class="btn" id="tax-btn" type="button">Compute Tax</button>
+
+          <div class="result" id="tax-result" role="status" aria-live="polite" hidden></div>
+        </div>
+      </section>
+
+      <!-- ---------- ASSIGNMENT 3: FACTORIAL, SUM, AVERAGE ---------- -->
+      <section class="view" id="assignment-3" aria-labelledby="a3-heading">
+        <header class="page-head">
+          <span class="eyebrow">Assignment 3</span>
+          <h1 id="a3-heading">Factorial, Sum, and Average</h1>
+          <p class="lede">
+            Three separate calculators for the first N natural numbers. Each one is solved with a
+            specific loop structure rather than a mathematical shortcut.
+          </p>
+        </header>
+
+        <!-- A. Factorial using a while loop -->
+        <div class="card">
+          <h2 class="card__title">A. Factorial <span class="tag">while loop</span></h2>
+          <p class="card__note">Computes N! by multiplying 1 &times; 2 &times; &hellip; &times; N.</p>
+
+          <div class="field">
+            <label for="fact-n">Enter a positive integer N</label>
+            <input type="number" id="fact-n" inputmode="numeric" step="1" min="0" placeholder="e.g. 5" autocomplete="off">
+            <p class="hint">Allowed range: 0 to 170 (0! equals 1).</p>
+          </div>
+
+          <button class="btn" id="fact-btn" type="button">Compute Factorial</button>
+          <div class="result" id="fact-result" role="status" aria-live="polite" hidden></div>
+        </div>
+
+        <!-- B. Sum using a do...while loop -->
+        <div class="card">
+          <h2 class="card__title">B. Sum <span class="tag">do&hellip;while loop</span></h2>
+          <p class="card__note">Adds up 1 + 2 + &hellip; + N.</p>
+
+          <div class="field">
+            <label for="sum-n">Enter a positive integer N</label>
+            <input type="number" id="sum-n" inputmode="numeric" step="1" min="1" placeholder="e.g. 10" autocomplete="off">
+            <p class="hint">Allowed range: 1 to 1,000,000.</p>
+          </div>
+
+          <button class="btn" id="sum-btn" type="button">Compute Sum</button>
+          <div class="result" id="sum-result" role="status" aria-live="polite" hidden></div>
+        </div>
+
+        <!-- C. Average using a for loop -->
+        <div class="card">
+          <h2 class="card__title">C. Average <span class="tag">for loop</span></h2>
+          <p class="card__note">Totals the first N natural numbers, then divides the total by N.</p>
+
+          <div class="field">
+            <label for="avg-n">Enter a positive integer N</label>
+            <input type="number" id="avg-n" inputmode="numeric" step="1" min="1" placeholder="e.g. 10" autocomplete="off">
+            <p class="hint">Allowed range: 1 to 1,000,000.</p>
+          </div>
+
+          <button class="btn" id="avg-btn" type="button">Compute Average</button>
+          <div class="result" id="avg-result" role="status" aria-live="polite" hidden></div>
+        </div>
+      </section>
+
+      <!-- ---------- ASSIGNMENT 4: SIMPLE PAYROLL ---------- -->
+      <section class="view" id="assignment-4" aria-labelledby="a4-heading">
+        <header class="page-head">
+          <span class="eyebrow">Assignment 4</span>
+          <h1 id="a4-heading">Simple Payroll</h1>
+          <p class="lede">
+            Enter the employee details to generate a payroll summary.
+            Gross Salary = Hourly Rate &times; Hours Worked.
+          </p>
+        </header>
+
+        <div class="card">
+          <div class="field">
+            <label for="pay-name">Employee name</label>
+            <input type="text" id="pay-name" placeholder="e.g. Juan Dela Cruz" autocomplete="off">
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="pay-rate">Hourly rate (PHP)</label>
+              <input type="number" id="pay-rate" inputmode="decimal" step="any" min="0" placeholder="e.g. 125.50" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="pay-hours">Hours worked</label>
+              <input type="number" id="pay-hours" inputmode="decimal" step="any" min="0" placeholder="e.g. 160" autocomplete="off">
+            </div>
+          </div>
+
+          <button class="btn" id="pay-btn" type="button">Compute Payroll</button>
+
+          <div class="result" id="pay-result" role="status" aria-live="polite" hidden></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

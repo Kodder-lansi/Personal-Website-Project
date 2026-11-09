@@ -1,4 +1,5 @@
 # JavaScript Programming Activities
+Coure:CS-1130 Introduction to Computing SEM 1 2026 GERALDE
 
 A simple and interactive website developed using HTML, CSS, and JavaScript. This project contains four programming assignments that demonstrate basic programming concepts through different calculators and simple programs.
 
@@ -14,3 +15,6 @@ A simple and interactive website developed using HTML, CSS, and JavaScript. This
 - HTML
 - CSS
 - JavaScript
+
+
+By: Kieffer Lance A. Devera, DS-1A

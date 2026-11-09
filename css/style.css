@@ -387,6 +387,8 @@ code {
   gap: 16px;
 }
 
+.grid > .card { margin-top: 0; }
+
 .card--link {
   display: flex;
   flex-direction: column;
